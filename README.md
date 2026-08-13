@@ -38,12 +38,12 @@ cp .env.example .env
 Required variables:
 
 ```env
-DATABASE_URL="postgresql://USER:PASSWORD@localhost:5432/pavithra_traders?schema=public"
-NEXTAUTH_SECRET="generate-with-openssl-rand-base64-32"
-NEXTAUTH_URL="http://localhost:3000"
-ADMIN_EMAIL="admin@pavithra.com"
-ADMIN_PASSWORD="ChangeMe@123"
-ADMIN_NAME="Shop Owner"
+DATABASE_URL=
+NEXTAUTH_SECRET=
+NEXTAUTH_URL=
+ADMIN_EMAIL=
+ADMIN_PASSWORD=
+ADMIN_NAME=
 ```
 
 Generate a secret:
