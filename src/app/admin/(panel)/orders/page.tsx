@@ -36,8 +36,8 @@ export default function AdminOrdersPage() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-black text-[#111827]">Orders</h1>
+    <div className="w-full min-w-0 max-w-full">
+      <h1 className="text-xl font-black break-words text-[#111827] md:text-2xl">Orders</h1>
       <p className="mt-1 text-sm text-gray-500">All customer orders from PostgreSQL</p>
 
       {isLoading ? (
@@ -51,31 +51,31 @@ export default function AdminOrdersPage() {
       ) : (
         <div className="mt-6 space-y-4">
           {orders.map((order) => (
-            <div key={order.id} className="rounded-lg border bg-white p-6 shadow-sm">
-              <div className="flex flex-wrap items-start justify-between gap-4">
-                <div>
-                  <p className="text-lg font-black text-[#F59E0B]">{order.orderNumber}</p>
-                  <p className="mt-1 font-semibold">{order.customerName}</p>
+            <div key={order.id} className="w-full min-w-0 max-w-full rounded-lg border bg-white p-4 shadow-sm sm:p-6">
+              <div className="flex flex-wrap items-start justify-between gap-3">
+                <div className="min-w-0">
+                  <p className="break-all text-base font-black text-[#F59E0B] sm:text-lg">{order.orderNumber}</p>
+                  <p className="mt-1 font-semibold break-words">{order.customerName}</p>
                   <p className="text-sm text-gray-500">{order.phone}</p>
                 </div>
-                <span className={`rounded-full px-3 py-1 text-xs font-bold ${STATUS_COLORS[order.status] ?? ""}`}>
+                <span className={`shrink-0 rounded-full px-3 py-1 text-xs font-bold ${STATUS_COLORS[order.status] ?? ""}`}>
                   {order.status}
                 </span>
               </div>
 
-              <div className="mt-4 grid gap-4 md:grid-cols-3">
-                <div>
+              <div className="mt-4 space-y-4 md:grid md:grid-cols-3 md:gap-4 md:space-y-0">
+                <div className="min-w-0">
                   <p className="text-xs font-semibold text-gray-500">PRODUCTS</p>
                   {order.items?.map((item) => (
-                    <p key={item.id} className="text-sm">
+                    <p key={item.id} className="break-words text-sm">
                       {item.productName} × {item.quantity} {item.unit}
                     </p>
                   ))}
                 </div>
-                <div>
+                <div className="min-w-0 md:col-span-1">
                   <p className="text-xs font-semibold text-gray-500">DELIVERY</p>
                   <p className="text-sm">{order.city}, {order.state}</p>
-                  <p className="text-sm text-gray-500">{order.deliveryAddress}</p>
+                  <p className="break-words text-sm text-gray-500">{order.deliveryAddress}</p>
                 </div>
                 <div>
                   <p className="text-xs font-semibold text-gray-500">TOTAL</p>
@@ -86,18 +86,18 @@ export default function AdminOrdersPage() {
                 </div>
               </div>
 
-              <div className="mt-4 flex flex-wrap gap-2">
+              <div className="mt-4 grid grid-cols-2 gap-2 sm:flex sm:flex-wrap">
                 <Link
                   href={`/admin/orders/${order.id}`}
-                  className="flex items-center gap-1 rounded bg-[#111827] px-3 py-1.5 text-xs font-bold text-white"
+                  className="flex items-center justify-center gap-1 rounded bg-[#111827] px-3 py-2 text-xs font-bold text-white sm:py-1.5"
                 >
-                  <Eye className="h-3 w-3" /> View Order
+                  <Eye className="h-3 w-3 shrink-0" /> View Order
                 </Link>
                 {order.status === "NEW" && (
                   <button
                     type="button"
                     onClick={() => updateStatus(order.id, "CONFIRMED")}
-                    className="rounded bg-blue-600 px-3 py-1.5 text-xs font-bold text-white"
+                    className="rounded bg-blue-600 px-3 py-2 text-xs font-bold text-white sm:py-1.5"
                   >
                     Confirm
                   </button>
@@ -106,15 +106,15 @@ export default function AdminOrdersPage() {
                   href={buildWhatsAppUrl(order.whatsapp ?? order.phone, `Order ${order.orderNumber}`)}
                   target="_blank"
                   rel="noopener noreferrer"
-                  className="flex items-center gap-1 rounded bg-[#25D366] px-3 py-1.5 text-xs font-bold text-white"
+                  className="flex items-center justify-center gap-1 rounded bg-[#25D366] px-3 py-2 text-xs font-bold text-white sm:py-1.5"
                 >
-                  <MessageCircle className="h-3 w-3" /> WhatsApp
+                  <MessageCircle className="h-3 w-3 shrink-0" /> WhatsApp
                 </a>
                 <a
                   href={`tel:${order.phone}`}
-                  className="flex items-center gap-1 rounded border px-3 py-1.5 text-xs font-bold"
+                  className="flex items-center justify-center gap-1 rounded border px-3 py-2 text-xs font-bold sm:py-1.5"
                 >
-                  <Phone className="h-3 w-3" /> Call
+                  <Phone className="h-3 w-3 shrink-0" /> Call
                 </a>
               </div>
             </div>

@@ -20,11 +20,11 @@ export function NewOrderNotification() {
   if (!latest) return null;
 
   return (
-    <div className="mb-6 flex items-start gap-3 rounded-lg border border-[#F59E0B] bg-[#F59E0B]/10 p-4">
+    <div className="mb-6 flex w-full min-w-0 items-start gap-3 rounded-lg border border-[#F59E0B] bg-[#F59E0B]/10 p-4">
       <Bell className="mt-0.5 h-5 w-5 shrink-0 text-[#F59E0B]" />
-      <div>
+      <div className="min-w-0">
         <p className="font-bold text-[#111827]">🔔 NEW ORDER RECEIVED</p>
-        <p className="mt-1 text-sm">
+        <p className="mt-1 break-words text-sm">
           <span className="font-semibold">{latest.orderNumber}</span>
           {" · "}
           {latest.customerName}

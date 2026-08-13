@@ -58,11 +58,11 @@ export default function AdminSettingsPage() {
   };
 
   return (
-    <div>
-      <h1 className="text-2xl font-black text-[#111827]">Settings</h1>
+    <div className="w-full min-w-0 max-w-full">
+      <h1 className="text-xl font-black break-words text-[#111827] md:text-2xl">Settings</h1>
       <p className="mt-1 text-sm text-gray-500">Business information stored in PostgreSQL</p>
 
-      <div className="mt-6 max-w-xl space-y-4 rounded-lg border bg-white p-6">
+      <div className="mt-6 w-full min-w-0 max-w-xl space-y-4 rounded-lg border bg-white p-4 sm:p-6">
         {[
           { key: "businessName" as const, label: "Business Name" },
           { key: "phone" as const, label: "Phone" },
@@ -71,41 +71,41 @@ export default function AdminSettingsPage() {
           { key: "address" as const, label: "Address" },
           { key: "openingHours" as const, label: "Opening Hours" },
         ].map(({ key, label }) => (
-          <div key={key}>
+          <div key={key} className="w-full min-w-0">
             <label className="text-sm font-semibold">{label}</label>
             <input
               value={current[key] ?? ""}
               onChange={(e) => update(key, e.target.value)}
-              className="mt-1 w-full rounded border px-3 py-2 text-sm"
+              className="mt-1 w-full min-w-0 rounded border px-3 py-2 text-sm"
             />
           </div>
         ))}
-        <div>
+        <div className="w-full min-w-0">
           <label className="text-sm font-semibold">Delivery Charge (₹)</label>
           <input
             type="number"
             value={current.deliveryCharge}
             onChange={(e) => update("deliveryCharge", parseFloat(e.target.value) || 0)}
-            className="mt-1 w-full rounded border px-3 py-2 text-sm"
+            className="mt-1 w-full min-w-0 rounded border px-3 py-2 text-sm"
           />
         </div>
-        <div>
+        <div className="w-full min-w-0">
           <label className="text-sm font-semibold">Minimum Order Value (₹)</label>
           <input
             type="number"
             value={current.minimumOrderValue}
             onChange={(e) => update("minimumOrderValue", parseFloat(e.target.value) || 0)}
-            className="mt-1 w-full rounded border px-3 py-2 text-sm"
+            className="mt-1 w-full min-w-0 rounded border px-3 py-2 text-sm"
           />
         </div>
 
-        {message && <p className="text-sm text-green-600">{message}</p>}
+        {message && <p className="break-words text-sm text-green-600">{message}</p>}
 
         <button
           type="button"
           onClick={handleSave}
           disabled={saving}
-          className="rounded-lg bg-[#F59E0B] px-6 py-2 text-sm font-bold text-[#111827] disabled:opacity-50"
+          className="w-full rounded-lg bg-[#F59E0B] px-6 py-2.5 text-sm font-bold text-[#111827] disabled:opacity-50 sm:w-auto"
         >
           {saving ? "Saving..." : "Save Settings"}
         </button>

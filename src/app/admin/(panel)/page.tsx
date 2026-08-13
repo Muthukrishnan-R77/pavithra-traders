@@ -48,8 +48,8 @@ export default function AdminDashboard() {
     : [];
 
   return (
-    <div>
-      <h1 className="text-2xl font-black text-[#111827]">Dashboard</h1>
+    <div className="w-full min-w-0 max-w-full">
+      <h1 className="text-xl font-black break-words text-[#111827] md:text-2xl">Dashboard</h1>
       <p className="mt-1 text-sm text-gray-500">Real-time store overview</p>
 
       <div className="mt-6">
@@ -57,20 +57,20 @@ export default function AdminDashboard() {
       </div>
 
       {isLoading ? (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {[...Array(8)].map((_, i) => (
             <div key={i} className="h-28 animate-pulse rounded-lg bg-gray-200" />
           ))}
         </div>
       ) : (
-        <div className="grid gap-4 sm:grid-cols-2 lg:grid-cols-4">
+        <div className="mt-6 grid grid-cols-1 gap-4 sm:grid-cols-2 lg:grid-cols-4">
           {cards.map((card) => (
-            <div key={card.label} className="rounded-lg border bg-white p-6 shadow-sm">
-              <div className="flex items-center justify-between">
+            <div key={card.label} className="w-full min-w-0 rounded-lg border bg-white p-4 shadow-sm sm:p-6">
+              <div className="flex items-center justify-between gap-2">
                 <p className="text-sm font-semibold text-gray-500">{card.label}</p>
-                <card.icon className={`h-5 w-5 ${card.color}`} />
+                <card.icon className={`h-5 w-5 shrink-0 ${card.color}`} />
               </div>
-              <p className="mt-2 text-2xl font-black text-[#111827]">{card.value}</p>
+              <p className="mt-2 break-words text-xl font-black text-[#111827] sm:text-2xl">{card.value}</p>
             </div>
           ))}
         </div>

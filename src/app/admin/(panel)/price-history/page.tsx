@@ -26,8 +26,8 @@ export default function PriceHistoryPage() {
   const history = data?.data ?? [];
 
   return (
-    <div>
-      <h1 className="text-2xl font-black text-[#111827]">Price History</h1>
+    <div className="w-full min-w-0 max-w-full">
+      <h1 className="text-xl font-black break-words text-[#111827] md:text-2xl">Price History</h1>
       <p className="mt-1 text-sm text-gray-500">Complete record of all price changes</p>
 
       {isLoading ? (
@@ -35,30 +35,64 @@ export default function PriceHistoryPage() {
       ) : history.length === 0 ? (
         <p className="mt-12 text-center text-gray-500">No price changes recorded yet.</p>
       ) : (
-        <div className="mt-6 overflow-x-auto rounded-lg border bg-white">
-          <table className="w-full text-sm">
-            <thead className="border-b bg-gray-50">
-              <tr>
-                <th className="px-4 py-3 text-left">Product</th>
-                <th className="px-4 py-3 text-left">Old Price</th>
-                <th className="px-4 py-3 text-left">New Price</th>
-                <th className="px-4 py-3 text-left">Changed By</th>
-                <th className="px-4 py-3 text-left">Date</th>
-              </tr>
-            </thead>
-            <tbody>
-              {history.map((h) => (
-                <tr key={h.id} className="border-b">
-                  <td className="px-4 py-3 font-semibold">{h.productName}</td>
-                  <td className="px-4 py-3">{formatCurrency(h.oldPrice)}/{h.unit}</td>
-                  <td className="px-4 py-3 font-bold text-[#DC2626]">{formatCurrency(h.newPrice)}/{h.unit}</td>
-                  <td className="px-4 py-3">{h.changedBy}</td>
-                  <td className="px-4 py-3">{formatDate(h.createdAt)} · {formatTime(h.createdAt)}</td>
+        <>
+          <div className="mt-6 hidden overflow-hidden rounded-lg border bg-white md:block">
+            <table className="w-full text-sm">
+              <thead className="border-b bg-gray-50">
+                <tr>
+                  <th className="px-4 py-3 text-left">Product</th>
+                  <th className="px-4 py-3 text-left">Old Price</th>
+                  <th className="px-4 py-3 text-left">New Price</th>
+                  <th className="px-4 py-3 text-left">Changed By</th>
+                  <th className="px-4 py-3 text-left">Date</th>
                 </tr>
-              ))}
-            </tbody>
-          </table>
-        </div>
+              </thead>
+              <tbody>
+                {history.map((h) => (
+                  <tr key={h.id} className="border-b">
+                    <td className="px-4 py-3 font-semibold">{h.productName}</td>
+                    <td className="px-4 py-3">{formatCurrency(h.oldPrice)}/{h.unit}</td>
+                    <td className="px-4 py-3 font-bold text-[#DC2626]">{formatCurrency(h.newPrice)}/{h.unit}</td>
+                    <td className="px-4 py-3">{h.changedBy}</td>
+                    <td className="px-4 py-3">{formatDate(h.createdAt)} · {formatTime(h.createdAt)}</td>
+                  </tr>
+                ))}
+              </tbody>
+            </table>
+          </div>
+
+          <div className="mt-4 space-y-4 md:hidden">
+            {history.map((h) => (
+              <div
+                key={h.id}
+                className="w-full min-w-0 max-w-full rounded-lg border bg-white p-4 shadow-sm"
+              >
+                <h3 className="text-base font-bold break-words text-[#111827]">{h.productName}</h3>
+                <p className="text-sm text-gray-500">{h.brand}</p>
+                <dl className="mt-3 space-y-2 text-sm">
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-gray-500">Old Price</dt>
+                    <dd>{formatCurrency(h.oldPrice)}/{h.unit}</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-gray-500">New Price</dt>
+                    <dd className="font-bold text-[#DC2626]">{formatCurrency(h.newPrice)}/{h.unit}</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-gray-500">Changed By</dt>
+                    <dd className="break-words text-right">{h.changedBy}</dd>
+                  </div>
+                  <div className="flex justify-between gap-2">
+                    <dt className="text-gray-500">Date</dt>
+                    <dd className="text-right text-xs">
+                      {formatDate(h.createdAt)} · {formatTime(h.createdAt)}
+                    </dd>
+                  </div>
+                </dl>
+              </div>
+            ))}
+          </div>
+        </>
       )}
     </div>
   );
