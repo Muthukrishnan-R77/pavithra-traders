@@ -14,14 +14,6 @@ function isAuthApiPath(pathname: string) {
   return pathname.startsWith("/api/auth");
 }
 
-function isPublicApiPath(pathname: string) {
-  return (
-    pathname.startsWith("/api/products") ||
-    pathname.startsWith("/api/orders") ||
-    pathname.startsWith("/api/settings")
-  );
-}
-
 function isStaticAsset(pathname: string) {
   return (
     pathname.startsWith("/_next") ||
@@ -61,6 +53,10 @@ export default auth((req) => {
     }
   }
 
+  if (!isAdminPath(pathname)) {
+    return NextResponse.next();
+  }
+
   if (pathname.startsWith("/admin/login")) {
     if (req.auth?.user?.role === "ADMIN") {
       return NextResponse.redirect(new URL("/admin", req.url));
@@ -68,22 +64,15 @@ export default auth((req) => {
     return NextResponse.next();
   }
 
-  if (pathname.startsWith("/admin")) {
-    if (!req.auth || req.auth.user?.role !== "ADMIN") {
-      const loginUrl = new URL("/admin/login", req.url);
-      loginUrl.searchParams.set("callbackUrl", pathname);
-      return NextResponse.redirect(loginUrl);
-    }
+  if (!req.auth || req.auth.user?.role !== "ADMIN") {
+    const loginUrl = new URL("/admin/login", req.url);
+    loginUrl.searchParams.set("callbackUrl", pathname);
+    return NextResponse.redirect(loginUrl);
   }
 
   return NextResponse.next();
 });
 
-const appMode = process.env.APP_MODE ?? "full";
-
 export const config = {
-  matcher:
-    appMode === "customer" || appMode === "admin"
-      ? ["/((?!_next/static|_next/image|favicon.ico|robots.txt|logo.png|images/).*)"]
-      : ["/admin", "/admin/:path*"],
+  matcher: ["/((?!_next/static|_next/image|favicon.ico|robots.txt|logo.png|images/).*)"],
 };

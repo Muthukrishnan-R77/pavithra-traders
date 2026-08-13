@@ -1,16 +1,19 @@
-# Deploy customer + admin as TWO separate Render web services.
-# Both share the same PostgreSQL database.
+# Two separate Render web services (customer + admin).
+# Uses your EXISTING PostgreSQL database — no new DB is created here.
 #
-# After deploy, set these manually in Render dashboard:
-#   pavithra-customer → ADMIN_URL = https://pavithra-admin.onrender.com/admin/login
-#   pavithra-admin    → NEXTAUTH_URL = https://pavithra-admin.onrender.com
-#   pavithra-admin    → ADMIN_PASSWORD = your secure password
-
-databases:
-  - name: pavithra-db
-    plan: free
-    databaseName: pavithra_traders
-    user: pavithra
+# BEFORE applying this Blueprint:
+# 1. Render dashboard → your existing database (pavithra-db) → copy External Database URL
+#
+# AFTER both services are Live, set Environment variables:
+#
+# pavithra-customer:
+#   DATABASE_URL = (paste existing database URL)
+#   ADMIN_URL    = https://pavithra-admin.onrender.com/admin/login
+#
+# pavithra-admin:
+#   DATABASE_URL     = (same database URL)
+#   NEXTAUTH_URL     = https://pavithra-admin.onrender.com
+#   ADMIN_PASSWORD   = your secure password
 
 services:
   - type: web
@@ -26,9 +29,7 @@ services:
       - key: APP_MODE
         value: customer
       - key: DATABASE_URL
-        fromDatabase:
-          name: pavithra-db
-          property: connectionString
+        sync: false
       - key: ADMIN_URL
         sync: false
 
@@ -45,9 +46,7 @@ services:
       - key: APP_MODE
         value: admin
       - key: DATABASE_URL
-        fromDatabase:
-          name: pavithra-db
-          property: connectionString
+        sync: false
       - key: NEXTAUTH_SECRET
         generateValue: true
       - key: NEXTAUTH_URL
