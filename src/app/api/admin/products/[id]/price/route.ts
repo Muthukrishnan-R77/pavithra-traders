@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-response";
@@ -46,6 +47,19 @@ export async function PATCH(
         },
       }),
     ]);
+
+    // Invalidate customer page caches so new price is reflected immediately
+    try {
+      revalidatePath("/");
+      revalidatePath("/cement");
+      revalidatePath("/steel");
+      revalidatePath("/products");
+      if (product.slug) {
+        revalidatePath(`/products/${product.slug}`);
+      }
+    } catch {
+      // Ignore cache revalidation errors if outside request context
+    }
 
     return apiSuccess(serializeProduct(updated));
   } catch (err) {

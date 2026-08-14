@@ -1,4 +1,5 @@
 import { NextRequest } from "next/server";
+import { revalidatePath } from "next/cache";
 import { prisma } from "@/lib/prisma";
 import { requireAdmin } from "@/lib/auth";
 import { apiSuccess, apiError, handleApiError } from "@/lib/api-response";
@@ -26,6 +27,18 @@ export async function PATCH(
       data: parsed.data,
     });
 
+    try {
+      revalidatePath("/");
+      revalidatePath("/cement");
+      revalidatePath("/steel");
+      revalidatePath("/products");
+      if (product.slug) {
+        revalidatePath(`/products/${product.slug}`);
+      }
+    } catch {
+      // Ignore
+    }
+
     return apiSuccess(serializeProduct(product));
   } catch (err) {
     return handleApiError(err, "Unable to update product.");
@@ -43,6 +56,15 @@ export async function DELETE(
     const { id } = await params;
 
     await prisma.product.delete({ where: { id } });
+
+    try {
+      revalidatePath("/");
+      revalidatePath("/cement");
+      revalidatePath("/steel");
+      revalidatePath("/products");
+    } catch {
+      // Ignore
+    }
 
     return apiSuccess({ deleted: true });
   } catch (err) {

@@ -1,16 +1,39 @@
 import { prisma } from "./prisma";
 import { decimalToNumber } from "./utils";
 
+const DEFAULT_SETTINGS = {
+  id: "default",
+  businessName: "PAVITHRA TRADERS",
+  phone: "9025644746",
+  whatsapp: "9025644746",
+  location: "AAA",
+  address: "AAA, Tamil Nadu, India",
+  openingHours: "Mon–Sat: 8:00 AM – 7:00 PM",
+  deliveryCharge: 200,
+  minimumOrderValue: 0,
+  logo: "/logo.png",
+};
+
 export async function getSettings() {
-  let settings = await prisma.settings.findFirst();
-  if (!settings) {
-    settings = await prisma.settings.create({ data: {} });
+  try {
+    const dbPromise = prisma.settings.findFirst();
+    const timeoutPromise = new Promise<null>((resolve) =>
+      setTimeout(() => resolve(null), 2000)
+    );
+
+    const settings = await Promise.race([dbPromise, timeoutPromise]);
+    if (settings) {
+      return {
+        ...settings,
+        deliveryCharge: decimalToNumber(settings.deliveryCharge),
+        minimumOrderValue: decimalToNumber(settings.minimumOrderValue),
+      };
+    }
+  } catch {
+    // Fallback to default
   }
-  return {
-    ...settings,
-    deliveryCharge: decimalToNumber(settings.deliveryCharge),
-    minimumOrderValue: decimalToNumber(settings.minimumOrderValue),
-  };
+
+  return DEFAULT_SETTINGS;
 }
 
 export function serializeProduct(product: {
@@ -21,16 +44,20 @@ export function serializeProduct(product: {
   category: "CEMENT" | "STEEL";
   brand: string;
   variant: string | null;
-  price: { toNumber(): number };
+  price: { toNumber(): number } | number;
   unit: string;
   stock: number;
   minimumStock: number;
   image: string | null;
   active: boolean;
+  createdAt?: Date | string;
+  updatedAt?: Date | string;
 }) {
   return {
     ...product,
-    price: decimalToNumber(product.price),
+    price: typeof product.price === "number" ? product.price : decimalToNumber(product.price),
+    createdAt: product.createdAt ? String(product.createdAt) : undefined,
+    updatedAt: product.updatedAt ? String(product.updatedAt) : undefined,
   };
 }
 

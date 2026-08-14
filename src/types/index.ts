@@ -1,9 +1,11 @@
+export type Category = "CEMENT" | "STEEL";
+
 export interface Product {
   id: string;
   name: string;
   slug: string;
   description: string | null;
-  category: "CEMENT" | "STEEL";
+  category: Category;
   brand: string;
   variant: string | null;
   price: number;
@@ -12,6 +14,8 @@ export interface Product {
   minimumStock: number;
   image: string | null;
   active: boolean;
+  createdAt?: string;
+  updatedAt?: string;
 }
 
 export interface CartItem {

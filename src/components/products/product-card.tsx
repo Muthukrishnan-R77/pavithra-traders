@@ -12,9 +12,10 @@ import { cn } from "@/lib/utils";
 
 interface ProductCardProps {
   product: Product;
+  priority?: boolean;
 }
 
-export function ProductCard({ product }: ProductCardProps) {
+export function ProductCard({ product, priority = false }: ProductCardProps) {
   const [quantity, setQuantity] = useState(1);
   const { addItem } = useCart();
   const stockStatus = getStockStatus(product.stock, product.minimumStock);
@@ -57,9 +58,9 @@ export function ProductCard({ product }: ProductCardProps) {
           src={product.image || "/images/cement/ultratech.jpg"}
           alt={product.name}
           fill
-          unoptimized
+          priority={priority}
           className="object-cover transition-transform duration-500 group-hover:scale-105"
-          sizes="(max-width: 768px) 100vw, 33vw"
+          sizes="(max-width: 640px) 100vw, (max-width: 1024px) 50vw, (max-width: 1280px) 33vw, 25vw"
         />
         <span className="absolute left-3 top-3 rounded bg-[#F59E0B] px-2 py-0.5 text-xs font-bold text-[#111827]">
           {product.brand}

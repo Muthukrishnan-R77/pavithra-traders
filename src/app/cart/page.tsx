@@ -35,7 +35,7 @@ export default function CartPage() {
                   src={item.image || "/images/cement/ultratech.jpg"}
                   alt={item.name}
                   fill
-                  unoptimized
+                  sizes="80px"
                   className="object-cover"
                 />
               </div>
